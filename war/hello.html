@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>My Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet"
+		href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script
+		src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+		<link rel="stylesheet" href="css/mycss.css">
+		<script src="js/myjs.js"></script>
+	</head>
+
+	<body>
+		<div data-role="page" id="home" data-theme="b">
+
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h1>Books</h1>
+				<a href="#home" data-icon="home" data-iconpos="notext">Home</a>
+				<a href="#cart" data-icon="shop" class="ui-btn-right" id="shoppingCart">12</a>
+			</div>
+			<!-- /header -->
+
+			<div data-role="content">
+
+				<ul data-role="listview" data-filter="true"  data-filter-placeholder="Find Books..." data-filter-theme="b">
+					<li>
+						<a href="#order_dialog" class="my-book-item" data-rel="dialog" data-id="adele">Adele</a>
+					</li>
+					<li>
+						<a href="#order_dialog" class="my-book-item" data-rel="dialog" data-id="billy">Billy</a>
+					</li>
+					<li>
+						<a href="#order_dialog" class="my-book-item" data-rel="dialog" data-id="calvin">Calvin</a>
+					</li>
+				</ul>
+				<!-- Book list -->
+
+			</div>
+			<!-- /content -->
+
+			<div id="cartPage"></div>
+
+		</div>
+		<!-- /page -->
+
+		<div data-role="page" id="cart" data-theme="b">
+
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h1>Cart</h1>
+				<a href="#home" data-icon="home" data-iconpos="notext">Home</a>
+				<a href="#cart" data-icon="shop" class="ui-btn-right" id="shoppingCart">12</a>
+			</div>
+			<!-- /header -->
+			<div data-role="content"></div>
+			<!-- /content -->
+		</div>
+
+		<div data-role="page" id="order_dialog" data-theme="b">
+
+			<!-- /content -->
+		</div>
+		<script>
+			$(document).ready(function() {
+				$('.my-book-item').click(function() {
+					console.log($(this).data('id'));
+					var content = "<div data-role='header' data-position='fixed' data-theme='b'>" + "<h1>Order</h1>" + "</div>" + "<div data-role='content'></div>";
+					$('#order_dialog').html(content);
+
+					$.mobile.changePage("OrderBook.jsp", {
+						type: "post",
+	                    data: $("form#search").serialize()
+					});
+					return false;
+				});
+			});
+		</script>
+	</body>
+</html>
