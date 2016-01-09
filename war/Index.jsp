@@ -33,6 +33,17 @@
 		}
 	%>
 
+	<script type="text/javascript">
+	<%
+	if (CommonUtils.isLoggedIn()) { %>
+	storeObject.isSignedIn = true;	
+	<%
+	} else {
+	%>
+	storeObject.isSignedIn = false;
+	<% } %>
+	</script>
+
 	<div data-role="page" id="home" data-theme="b">
 
 
@@ -45,11 +56,12 @@
 		</div>
 		<!-- /header -->
 
+		<%if (CommonUtils.isLoggedIn()) { %>
 		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-					<li><a href="#page_view_cart" data-icon="navigation" class="view_cart_nav">View
-							Cart</a></li>
+					<li><a href="#page_view_cart" data-icon="navigation"
+						class="view_cart_nav">View Cart</a></li>
 					<li><a href="#page_view_orders" data-icon="navigation"
 						class="view_order_nav">View Orders</a></li>
 				</ul>
@@ -57,16 +69,17 @@
 			</div>
 		</div>
 		<!-- /footer -->
+		<% } %>
 
 		<div data-role="content">
 
-		
+
 			<!-- 	Book book = new Book();
 				book.setAuthor("A. C. Bhaktivedanta Swami Prabhupada");
 				book.setTitle("Bhagavad-Gita As It Is");
 				book.setAvaibaleUnits(100);
 				Datastore.put(book); -->
-			
+
 
 			<ul data-role="listview" data-filter="true"
 				data-filter-placeholder="Find Books..." data-filter-theme="b">
@@ -125,7 +138,7 @@
 				<div class="book_title"></div>
 			</h3>
 			<h5>
-			<div class="book_author"></div>
+				<div class="book_author"></div>
 			</h5>
 			<div class="available_units"></div>
 			<div data-role="fieldcontain" class="ui-hide-label">
@@ -150,7 +163,7 @@
 			<a href="#" data-role="button" class='place_order'>Place order</a>
 		</div>
 	</div>
-	
+
 	<div data-role="page" id="page_view_orders" data-theme="b">
 		<div data-role="header" data-position="fixed" data-theme="b">
 			<h1>My orders</h1>

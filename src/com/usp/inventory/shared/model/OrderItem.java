@@ -15,6 +15,9 @@ public class OrderItem implements Serializable {
 
     @Attribute(primaryKey = true)
     private Key key;
+    
+    @Attribute(persistent = false)
+    private String id;
 
     @Attribute(version = true)
     private Long version;
@@ -147,5 +150,13 @@ public class OrderItem implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

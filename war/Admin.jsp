@@ -13,7 +13,7 @@
 	<div data-role="page" id="page_admin_orders" data-theme="b">
 		<div data-role="header" data-position="fixed" data-theme="b">
 			<h1>Orders</h1>
-			<a href="#home" data-icon="home" data-iconpos="notext">Home</a> <a
+			<a href="index" data-icon="home" data-iconpos="notext">Home</a> <a
 				href="#" class="ui-btn-right" data-ajax='false' id="shoppingCart">Hello</a>
 		</div>
 		<!-- /header -->

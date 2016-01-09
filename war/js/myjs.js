@@ -6,6 +6,7 @@
 
 //Store object
 var storeObject = {
+        isSignedIn : false,
         bookId : '',
         viewOrderCursor :'',
 }
@@ -20,7 +21,9 @@ $(document).on("pageinit", "#home", function() {
     $('.my-book-item').click(function() {
         storeObject.bookId = $(this).data('id');
         console.log(storeObject.bookId);
-        $.mobile.changePage("#page_book_details");
+        if (storeObject.isSignedIn) {
+            $.mobile.changePage("#page_book_details");
+        }
     });
 });
 
@@ -139,13 +142,13 @@ function populateViewOrders() {
                 $.each(data.data, function( index, value ) {
                     status = '';
                     if (value.approvalStatus == 0) {
-                        status = "Pending";
+                        status = "<font color='red'>Pending</font>";
                     } else if (value.approvalStatus == 1) {
-                        status = "Approved";
+                        status = "<font color='green'>Approved</font>";
                     }
                     content += "<li><a href='#'><h3>" + value.book.title + "</h3>"
                     + "<p id='no-ellipsis'>by "+  value.book.author + ".</p>"
-                    + "<p id='no-ellipsis'>Order date : " + value.date + "</p>"
+                    + "<p id='no-ellipsis'>Order date : " + new Date(value.date).toString() + "</p>"
                     + "<p id='no-ellipsis'>Units ordered : " + value.units + "</p>"
                     + "<h4>Status : " + status +"</h4>"
                     + "</a></li>";
@@ -180,6 +183,17 @@ $(document).on("pagebeforeshow", "#page_admin_orders", function(event) {
 
 
 
+function addAdminEventHandlers() {
+    $('.order-accept').click(function() {
+        adminUpdateOrders($(this).data('id'), true);
+    });
+
+    $('.order-reject').click(function() {
+        adminUpdateOrders($(this).data('id'), false);
+    });
+
+}
+
 function fetchAllOrders() {
     loading('show'); 
     $(document).off("scrollstop");
@@ -192,35 +206,59 @@ function fetchAllOrders() {
                 $.each(data.orders, function( index, value ) {
                     status = '';
                     if (value.approvalStatus == 0) {
-                        status = "Pending";
+                        status = "<font color='red'>Pending</font>";
                     } else if (value.approvalStatus == 1) {
-                        status = "Approved";
+                        status = "<font color='green'>Approved</font>";
                     }
                     content += "<li><h3>" + value.book.title + "</h3>"
                     + "<p id='no-ellipsis'>by "+  value.book.author + ".</p>"
-                    + "<p id='no-ellipsis'>Order date : " + value.date + "</p>"
+                    + "<p id='no-ellipsis'>Order date : " + new Date(value.date).toString("MMM dd") + "</p>"
                     + "<p id='no-ellipsis'>Units ordered : " + value.units + "</p>"
 
                     + "<p id='no-ellipsis'>Requester : " + value.requesterEmail + "</p>"
                     + "<h4>Status : " + status +"</h4>"
 
                     + "<div data-role='controlgroup' data-type='horizontal' class='my-controlgroup'>" 
-                    +       "<a href='#' data-role='button' data-icon='arrow-u'>Accept</a>"
-                    +       "<a href='#' data-role='button' data-icon='arrow-d'>Reject</a>"
+                    +       "<a href='#' data-role='button' data-icon='arrow-u' class='order-accept' data-id='"+ value.id +"'>Accept</a>"
+                    +       "<a href='#' data-role='button' data-icon='arrow-d' class='order-reject' data-id='"+ value.id +"'>Reject</a>"
                     + "</div>"
                     + "</li>";
                 });
                 $('#page_admin_orders .list_view').append(content);
                 $('#page_admin_orders .list_view').listview('refresh');
-                
-            
+
+
                 $("#page_admin_orders .list_view").trigger('create');
-                
+
+                addAdminEventHandlers();
+
                 loading('hide'); 
                 $(document).on("scrollstop", checkScroll);
             });
 }
 
+function adminUpdateOrders(orderId, isAccept) {
+    console.log("admin update orders");
+    loading('show'); 
+    $.post("AdminUpdateOrders",
+            {
+        "order_id": orderId,
+        "is_accept" : isAccept
+            },
+            function(data) {
+                console.log(data);
+                loading('hide'); 
+                if (data.indexOf("http://") === 0
+                        || data.indexOf("https://") === 0
+                        || data.indexOf("/") === 0) {
+                    $('#page_signin .signin-link').html("<a href='" + data + "' data-ajax='false'> Sign in </a>");
+                    $.mobile.changePage('#page_signin');
+                } else {
+                    // Page refresh
+                    refreshPage();
+                }
+            });
+}
 //////////////////******Scrolling Infinite list*******//////////////////////////
 
 /* check scroll function */
@@ -251,6 +289,18 @@ function addMore(page) {
         fetchAllOrders();
     }
 }
+
+function refreshPage() {
+    $.mobile.changePage(
+      window.location.href,
+      {
+        allowSamePageTransition : true,
+        transition              : 'none',
+        showLoadMsg             : false,
+        reloadPage              : true
+      }
+    );
+  }
 
 /* attach if scrollstop for first time */
 $(document).on("scrollstop", checkScroll);
