@@ -17,6 +17,98 @@ function loading(showOrHide) {
     }, 1); 
 }
 
+
+$(document).on("pageinit", "#page_report", function() {
+    console.log("pageinit......page_report");
+    $('#page_report #btn_add_devotee').attr("my_counter", "0");
+    $('#page_report #btn_add_currency').attr("my_counter", "1");
+    $('#page_report #list_selected_books').attr("my_counter", "0");
+    
+    
+    $('#page_report .my-book-item').click(function() {
+        my_counter=$('#page_report #list_selected_books').attr("my_counter");
+        console.log(my_counter);
+        bookId = $(this).data('id');
+        bookTitle = $(this).data('title');
+        
+        $('#page_report #list_selected_books').append(
+                '<li id="book_id_'+ bookId + '">'
+                + '<a href="#" > <label>'+ bookTitle +'</label>'
+                + '<input type="number" value="0">'
+                + '</a>'
+                + '<a href="#" class="delete" data-id="'+ bookId + '">Delete</a>'
+                + '</li>');
+        $('#page_report #list_selected_books').listview('refresh');
+        $('input').textinput(); 
+        
+        // clear the search filter
+        $('input[data-type="search"]').val("");
+        $('input[data-type="search"]').trigger("keyup");
+    });
+    
+    $('#page_report #list_selected_books').on('click', '.delete', function() {
+        bookId = $(this).data('id');
+        $('#page_report #list_selected_books #book_id_' + bookId).remove();
+      });
+    
+    $('#page_report #btn_add_devotee').click(function() {
+        my_counter=$('#page_report #btn_add_devotee').attr("my_counter");
+        console.log(my_counter);
+        $('#page_report #list_devotee').append(
+                '<li id="devotee_name_' + my_counter + '">'
+                + '<a>'
+                + '<input type="text" class="devotee_name_' + my_counter + '">'
+                + '</a>'
+                + '<a href="#" class="delete" data-id="'+ my_counter +'">Delete</a>'
+                + '</li>');
+        $('#page_report #list_devotee').listview('refresh');
+        $('input').textinput();
+        $('#page_report #btn_add_devotee').attr("my_counter", my_counter + 1);
+    });
+    
+    $('#page_report #list_devotee').on('click', '.delete', function() {
+        devoteeId = $(this).data('id');
+        console.log(devoteeId);
+        $('#page_report #list_devotee #devotee_name_' + devoteeId).remove();
+      });
+    
+    
+    // Add more currency
+    $('#page_report #btn_add_currency').click(function() {
+        my_counter=$('#page_report #btn_add_currency').attr("my_counter");
+        console.log(my_counter);
+        $('#page_report #list_currency').append(
+                '<li id="currency_id_' + my_counter + '">'
+                + '<a>'
+                + '<div class="ui-grid-a">'
+                + '<div class="ui-block-a">'
+                + '<input type="number" value="0" id="currency_value_'+my_counter+'"/>'
+                + '</div>'
+                + '<div class="ui-block-b">'
+                + '<select id="currency_type_"'+ my_counter +'" data-theme="b">'
+                + '<option value="USD">USD</option>'
+                + '<option value="AUD">AUD</option>'
+                + '<option value="INR">INR</option>'
+                + '</select>'
+                + '</div>'
+                + '</div> </a>'
+                + '<a href="#" class="currency_delete" data-id="'+ my_counter +'">Delete</a>'
+                + '</li>');
+        $('#page_report #list_currency').listview('refresh');
+        $('input').textinput();
+        $('select').selectmenu();
+        $('#page_report #btn_add_currency').attr("my_counter", my_counter + 1);
+    });
+    
+    // Remove currency row
+    $('#page_report #list_currency').on('click', '.currency_delete', function() {
+        currencyId = $(this).data('id');
+        console.log(currencyId);
+        $('#page_report #list_currency #currency_id_' + currencyId).remove();
+      });
+    
+});
+
 $(document).on("pageinit", "#home", function() {
     $('.my-book-item').click(function() {
         storeObject.bookId = $(this).data('id');
@@ -146,10 +238,16 @@ function populateViewOrders() {
                     } else if (value.approvalStatus == 1) {
                         status = "<font color='green'>Approved</font>";
                     }
+                    units = '';
+                    if (value.units < 0) {
+                        units = "<font color='yellow'>" + value.units + "</font>"
+                    } else {
+                        units = "<font color='red'>" + value.units + "</font>"
+                    }
                     content += "<li><a href='#'><h3>" + value.book.title + "</h3>"
                     + "<p id='no-ellipsis'>by "+  value.book.author + ".</p>"
                     + "<p id='no-ellipsis'>Order date : " + new Date(value.date).toString() + "</p>"
-                    + "<p id='no-ellipsis'>Units ordered : " + value.units + "</p>"
+                    + "<p id='no-ellipsis'>Units ordered : " + units + "</p>"
                     + "<h4>Status : " + status +"</h4>"
                     + "</a></li>";
                 });
@@ -168,8 +266,7 @@ function populateViewOrders() {
 
                 $(document).on("scrollstop", checkScroll);
             });
-}
-
+};
 
 
 ///////********* Admin controls ********////////////
@@ -210,10 +307,19 @@ function fetchAllOrders() {
                     } else if (value.approvalStatus == 1) {
                         status = "<font color='green'>Approved</font>";
                     }
+
+                    units = '';
+                    if (value.units > 0) {
+                        units = "<font color='yellow'>" + value.units + "</font>"
+                    } else {
+                        units = "<font color='red'>" + value.units + "</font>"
+                    }
+
+
                     content += "<li><h3>" + value.book.title + "</h3>"
                     + "<p id='no-ellipsis'>by "+  value.book.author + ".</p>"
                     + "<p id='no-ellipsis'>Order date : " + new Date(value.date).toString("MMM dd") + "</p>"
-                    + "<p id='no-ellipsis'>Units ordered : " + value.units + "</p>"
+                    + "<p id='no-ellipsis'>Units ordered : " + units + "</p>"
 
                     + "<p id='no-ellipsis'>Requester : " + value.requesterEmail + "</p>"
                     + "<h4>Status : " + status +"</h4>"
@@ -292,16 +398,36 @@ function addMore(page) {
 
 function refreshPage() {
     $.mobile.changePage(
-      window.location.href,
-      {
-        allowSamePageTransition : true,
-        transition              : 'none',
-        showLoadMsg             : false,
-        reloadPage              : true
-      }
+            window.location.href,
+            {
+                allowSamePageTransition : true,
+                transition              : 'none',
+                showLoadMsg             : false,
+                reloadPage              : true
+            }
     );
-  }
+}
 
 /* attach if scrollstop for first time */
 $(document).on("scrollstop", checkScroll);
+
+
+
+/**** AutoComplete ****/
+$("input[data-type='search']").keyup(function () {
+    if ($(this).val() === '') {
+        $(this).closest('form').next("[data-role=listview]").children().addClass('ui-screen-hidden');
+    }
+});
+
+$('a.ui-input-clear').click(function () {
+    $(this).closest('input').val('');
+    $(this).closest('input').trigger('keyup');
+});
+
+$("li").click(function () {
+    var text = $(this).find('.ui-link-inherit').text();
+    $(this).closest('[data-role=listview]').prev('form').find('input').val(text);
+    $(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');
+});
 

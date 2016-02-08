@@ -42,10 +42,76 @@
 			</div>
 			<!-- /content -->
 
-			<div id="cartPage"></div>
-
+<div data-role="main" class="ui-content">
+    <p>Welcome!</p>
+    <a href="#pagetwo">Go to Dialog Page</a>
+  </div>
 		</div>
 		<!-- /page -->
+		
+		<div data-role="page" data-dialog="true" id="pagetwo">
+  <div data-role="header">
+    <h1>I'm A Dialog Box!</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  	<form>
+  <input>
+</form>
+  	
+  	  <ul data-role="listview" data-filter="true">
+            <li class="ui-screen-hidden"><a href="#">Acura</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Audi</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">BMW</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Cadillac</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Chrysler</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Dodge</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Ferrari</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Ford</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">GMC</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Honda</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Hyundai</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Infiniti</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Jeep</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Kia</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Lexus</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Mini</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Nissan</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Porsche</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Subaru</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Toyota</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Volkswagon</a>
+            </li>
+            <li class="ui-screen-hidden"><a href="#">Volvo</a>
+            </li>
+        </ul>
+    <a href="#pageone">Go to Page One</a>
+  </div>
+
+  <div data-role="footer">
+    <h1>Footer Text In Dialog</h1>
+  </div>
+</div> 
 
 		<div data-role="page" id="cart" data-theme="b">
 
@@ -62,7 +128,7 @@
 		<div data-role="page" id="order_dialog" data-theme="b">
 
 			<!-- /content -->
-		</div>
+		<!-- </div>
 		<script>
 			$(document).ready(function() {
 				$('.my-book-item').click(function() {
@@ -77,6 +143,6 @@
 					return false;
 				});
 			});
-		</script>
+		</script> -->
 	</body>
 </html>
